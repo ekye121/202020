@@ -22,22 +22,32 @@
   font-variant-numeric: tabular-nums;
 }
 
-.buttons > button {
-  margin: 15px;
-  font-size: 16px;
+.buttons {
   cursor: pointer;
   outline-width: 0;
   border-radius: 25px;
   border-width: 0px;
-  padding: 10px;
-  color: #fff;
-  width: 145px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-image: linear-gradient(to left, #795ffe, #345ee6, #795ffe, #345ee6);
   background-size: 300%;
-  transition: background-position .35s cubic-bezier(.47, .1, 1, .63), color .3s ease-in-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #fff;
 }
-.buttons > button:hover {
+.cta-buttons {
+  margin: 15px;
+  font-size: 16px;
+  padding: 10px;
+  width: 145px;
+  background-image: linear-gradient(to left, #486dff, #7d2e93, #486dff, #7d2e93);
+}
+.cta-buttons:hover {
+  transform: scale(1.04);
+}
+#tab-timer {
+  margin: 8px;
+  font-size: 11px;
+  padding: 0px;
+  width: 60px;
+  background-image: linear-gradient(to left, #ffa03a, #ff4848, #ffa03a, #ff4848);
+  height: 17px;
   background-position: 50%;
 }
 
