@@ -12,6 +12,7 @@
 
 .desc {
   font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .timer {
@@ -41,7 +42,7 @@
 .cta-buttons:hover {
   transform: scale(1.04);
 }
-#tab-timer {
+#tab-timer, #bg-flash {
   margin: 8px;
   font-size: 11px;
   padding: 0px;
@@ -52,27 +53,28 @@
 }
 
 .volume-control {
-  position: relative;
   text-align: left;
-  margin-left: 25%;
-  width: 185px;
-  font-feature-settings: "tnum";
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 10px;
+  position: relative;
+  width: 201px;
+  margin: auto;
+  left: 2px;
 }
 
 .audio {
-  width: 19px;
-  height: 14px;
+  width: 15px;
+  height: 11px;
   position: relative;
-  left: -14px;
-  top: -1px;
+  top: -2.5px;
+  margin-right: 14px;
+}
+
+.slider {
+  margin-right: 15px;
 }
 
 #range-volume {
-  font-size: 15px;
+  font-size: 13px;
   position: relative;
-  right: -13px;
   top: -4px;
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-import audio from './audio-icon.png';
+import Sound from './Sound.jsx';
+import SettingButtons from './SettingButtons.jsx';
 
-let timer, alert, textTalk = window.speechSynthesis;
+let timer, alert, delayTimer, delayAlert;
 
 function Timer() {
   const [time, setTime] = useState('20:00');
   const [isTimerOn, setIsTimerOn] = useState(false);
   const [isAlertOn, setIsAlertOn] = useState(false);
-  const [volume, setVolume] = useState(50);
+  const [sound, setSound] = useState(50);
   const [toggleTabTimer, setToggleTabTimer] = useState(true);
+  const [bgFlash, setBgFlash] = useState(true);
 
   function startTimer() {
     timer = setInterval(() => {
@@ -46,6 +48,7 @@ function Timer() {
   }
 
   function handleStartClick() {
+    clearTimer();
     setTime('20:00');
     setIsTimerOn(true);
     setIsAlertOn(false);
@@ -53,104 +56,109 @@ function Timer() {
   }
 
   function handleStopClick() {
+    clearTimer();
     setTime('20:00');
     setIsTimerOn(false);
     setIsAlertOn(false);
   }
 
-  function flashBG() {
-    document.body.style.backgroundColor = '#bcbcbc';
-    setTimeout(() => {
-      document.body.style.backgroundColor = '#000';
-    }, 250);
+  function clearTimer() {
+    clearInterval(timer);
+    clearInterval(alert);
+    clearTimeout(delayTimer);
+    clearTimeout(delayAlert);
   }
 
-  function speech(text) {
-    let utter = new SpeechSynthesisUtterance(text);
-    utter.volume = volume * .01;
-    textTalk.speak(utter);
+  function flashBG() {
+    document.body.style.backgroundColor = '#a3a3a3';
+    setTimeout(() => {
+      document.body.style.backgroundColor = '#000';
+    }, 200);
+  }
+
+  function buttonSlider(buttonState, el) {
+    if (buttonState) el.style.backgroundPosition = '50%';
+    else el.style.backgroundPosition = '100%';
+  }
+
+  function utterText(text, sound) {
+    let utter = new SpeechSynthesisUtterance();
+    utter.volume = sound * .01;
+    utter.text = text;
+    window.speechSynthesis.speak(utter);
   }
 
   useEffect(() => {
     let rangeVolume = document.querySelector('#range-volume');
-    rangeVolume.innerHTML = volume;
+    rangeVolume.innerHTML = sound;
 
-    let startButton = document.querySelector('#start-button');
-    startButton.addEventListener('click', (e) => {
-      clearInterval(timer);
-      clearInterval(alert);
-    });
-  }, [volume]);
+    if (time === '00:00') {
+      if (isTimerOn) utterText('go away', sound);
+      if (isAlertOn) utterText('come back', sound);
+    }
+  }, [time, isTimerOn, isAlertOn]);
 
   useEffect(() => {
-    if (isTimerOn && time === '00:00') {
-      speech('go away');
-      flashBG();
-      clearInterval(timer);
-      setTimeout(() => {
-        setTime('00:20');
-        startAlert();
-        setIsAlertOn(true);
-        setIsTimerOn(false);
-      }, 2000);
-    }
-    if (isAlertOn && time === '00:00') {
-      clearInterval(alert);
-      speech('come back');
-      flashBG();
-      setTimeout(() => {
-        setTime('20:00');
-        startTimer();
-        setIsTimerOn(true);
-        setIsAlertOn(false);
-      }, 2000);
-    }
-    if (!isTimerOn && !isAlertOn) {
-      clearInterval(timer);
-      clearInterval(alert);
-    }
+    let bgFlashButton = document.querySelector('#bg-flash');
+    buttonSlider(bgFlash, bgFlashButton);
 
     let pageTitle = document.querySelector('title');
-    let tabTimer = document.querySelector('#tab-timer');
-    if (toggleTabTimer) {
-      pageTitle.textContent = time;
-      tabTimer.style.backgroundPosition = '50%';
-    } else {
-      pageTitle.textContent = '20 20 20';
-      tabTimer.style.backgroundPosition = '100%';
+    let tabTimerButton = document.querySelector('#tab-timer');
+    buttonSlider(toggleTabTimer, tabTimerButton);
+    if (toggleTabTimer) pageTitle.textContent = time;
+    else pageTitle.textContent = '20 20 20';
+
+    if (time === '00:00') {
+      if (bgFlash) flashBG();
     }
-  }, [time, isTimerOn, isAlertOn, toggleTabTimer]);
+  }, [time, toggleTabTimer, bgFlash]);
+
+  useEffect(() => {
+    if (time === '00:00') {
+      if (isTimerOn) {
+        clearInterval(timer);
+        delayTimer = setTimeout(() => {
+          setTime('00:20');
+          setIsTimerOn(false);
+          setIsAlertOn(true);
+          startAlert();
+        }, 2000);
+      }
+      if (isAlertOn) {
+        clearInterval(alert);
+        delayAlert = setTimeout(() => {
+          setTime('20:00');
+          setIsTimerOn(true);
+          setIsAlertOn(false);
+          startTimer();
+        }, 2000);
+      }
+    }
+    if (!isTimerOn && !isAlertOn) {
+      clearTimer();
+    }
+  }, [time, isTimerOn, isAlertOn]);
 
   return (
     <div>
       <div className="timer">{time}</div>
-      <div className="volume-control">
-        <img src={audio} className="audio"/>
-        <input
-          className="slider"
-          type="range"
-          min="0"
-          max="100"
-          value="50"
-          value={volume}
-          onChange={(e) => setVolume(() => e.target.value)}/>
-        <span id="range-volume"></span>
-      </div>
       <div>
-        <button className="buttons cta-buttons" id="start-button" onClick={handleStartClick}>Start / Reset</button>
-        <button className="buttons cta-buttons" id="stop-button" onClick={handleStopClick}>Stop</button>
+        <button
+          className="buttons cta-buttons"
+          id="start-button"
+          onClick={handleStartClick}>
+          Start / Reset
+        </button>
+        <button
+          className="buttons cta-buttons"
+          id="stop-button"
+          onClick={handleStopClick}>
+          Stop
+        </button>
       </div>
-      <div className="desc">
-        <div>Look 20 feet away for 20 seconds every 20 minutes</div>
-        <div>(Works best with sound)</div>
-      </div>
-      <span className="desc">Toggle window tab timer:</span>
-      <button
-        className="buttons"
-        id="tab-timer"
-        onClick={() => setToggleTabTimer((toggleTabTimer) => !toggleTabTimer)}
-      >On / Off
-      </button>
+      <div className="desc">Look 20 feet away for 20 seconds every 20 minutes</div>
+      <Sound sound={sound} setSound={setSound}/>
+      <SettingButtons setToggleTabTimer={setToggleTabTimer} setBgFlash={setBgFlash}/>
     </div>
   )
 }
