@@ -1,5 +1,5 @@
 function SettingButtons(props) {
-  const {setToggleTabTimer, setBgFlash} = props;
+  const {setTabTimer, setBgFlash} = props;
   return (
     <div>
       <div>
@@ -7,7 +7,7 @@ function SettingButtons(props) {
         <button
           className="buttons"
           id="tab-timer"
-          onClick={() => setToggleTabTimer((toggleTabTimer) => !toggleTabTimer)}>
+          onClick={() => setTabTimer((tabTimer) => !tabTimer)}>
           On | Off
         </button>
       </div>
