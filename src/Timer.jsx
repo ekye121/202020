@@ -9,9 +9,9 @@ function Timer() {
   const [time, setTime] = useState('20:00');
   const [isTimerOn, setIsTimerOn] = useState(false);
   const [isAlertOn, setIsAlertOn] = useState(false);
-  const [sound, setSound] = useState(50);
-  const [toggleTabTimer, setToggleTabTimer] = useState(true);
-  const [bgFlash, setBgFlash] = useState(true);
+  const [sound, setSound] = useState(window.localStorage.getItem('sound') || 50);
+  const [toggleTabTimer, setToggleTabTimer] = useState(window.localStorage.getItem('toggleTabTimer') || true);
+  const [bgFlash, setBgFlash] = useState(window.localStorage.getItem('bgFlash') || true);
 
   function startTimer() {
     timer = setInterval(() => {
@@ -49,7 +49,7 @@ function Timer() {
 
   function handleStartClick() {
     clearTimer();
-    setTime('20:00');
+    setTime('00:03');
     setIsTimerOn(true);
     setIsAlertOn(false);
     startTimer();
@@ -96,22 +96,30 @@ function Timer() {
       if (isTimerOn) utterText('go away', sound);
       if (isAlertOn) utterText('come back', sound);
     }
-  }, [time, isTimerOn, isAlertOn]);
+  }, [time, isTimerOn, isAlertOn, sound]);
 
   useEffect(() => {
+    window.localStorage.setItem('toggleTabTimer', toggleTabTimer);
+    window.localStorage.setItem('bgFlash', bgFlash);
+    window.localStorage.setItem('sound', sound);
+
+    if (bgFlash === 'true') setBgFlash(true);
+    if (bgFlash === 'false') setBgFlash(false);
+    if (toggleTabTimer === 'true') setToggleTabTimer(true);
+    if (toggleTabTimer === 'false') setToggleTabTimer(false);
+
     let bgFlashButton = document.querySelector('#bg-flash');
     buttonSlider(bgFlash, bgFlashButton);
 
-    let pageTitle = document.querySelector('title');
     let tabTimerButton = document.querySelector('#tab-timer');
     buttonSlider(toggleTabTimer, tabTimerButton);
+
+    let pageTitle = document.querySelector('title');
     if (toggleTabTimer) pageTitle.textContent = time;
     else pageTitle.textContent = '20 20 20';
 
-    if (time === '00:00') {
-      if (bgFlash) flashBG();
-    }
-  }, [time, toggleTabTimer, bgFlash]);
+    if (time === '00:00' && bgFlash) flashBG();
+  });
 
   useEffect(() => {
     if (time === '00:00') {
@@ -141,6 +149,7 @@ function Timer() {
 
   return (
     <div>
+      <div className="desc">Look 20 feet away for 20 seconds every 20 minutes</div>
       <div className="timer">{time}</div>
       <div>
         <button
@@ -156,7 +165,6 @@ function Timer() {
           Stop
         </button>
       </div>
-      <div className="desc">Look 20 feet away for 20 seconds every 20 minutes</div>
       <Sound sound={sound} setSound={setSound}/>
       <SettingButtons setToggleTabTimer={setToggleTabTimer} setBgFlash={setBgFlash}/>
     </div>
