@@ -49,7 +49,7 @@ function Timer() {
 
   function handleStartClick() {
     clearTimer();
-    setTime('00:03');
+    setTime('20:00');
     setIsTimerOn(true);
     setIsAlertOn(false);
     startTimer();
