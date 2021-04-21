@@ -71,6 +71,7 @@
 
 .slider {
   margin-right: 15px;
+  cursor: pointer;
 }
 
 #range-volume {
