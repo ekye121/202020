@@ -12,7 +12,7 @@
 
 .desc {
   font-size: 13px;
-  margin-bottom: 12px;
+  margin-top: 10px;
 }
 
 .timer {
@@ -21,6 +21,15 @@
   letter-spacing: 2px;
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
+}
+
+.min-sec {
+  font-size: 15px;
+  position: relative;
+  top: -31px;
+}
+.min-sec > span {
+  margin: 29px;
 }
 
 .buttons {
@@ -33,7 +42,7 @@
   color: #fff;
 }
 .cta-buttons {
-  margin: 15px;
+  margin: 10px 10px 20px 10px;
   font-size: 16px;
   padding: 10px;
   width: 145px;
@@ -50,6 +59,10 @@
   background-image: linear-gradient(to left, #ffa03a, #ff4848, #ffa03a, #ff4848);
   height: 17px;
   background-position: 50%;
+}
+.button-desc {
+  font-size: 13px;
+  margin-top: 10px;
 }
 
 .volume-control {

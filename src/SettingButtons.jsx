@@ -3,7 +3,7 @@ function SettingButtons(props) {
   return (
     <div>
       <div>
-        <span className="desc">Window tab timer:</span>
+        <span className="button-desc">Window tab timer:</span>
         <button
           className="buttons"
           id="tab-timer"
@@ -12,7 +12,7 @@ function SettingButtons(props) {
         </button>
       </div>
       <div>
-        <span className="desc">Background flash:</span>
+        <span className="button-desc">Background flash:</span>
         <button
           className="buttons"
           id="bg-flash"

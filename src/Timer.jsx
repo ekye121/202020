@@ -151,6 +151,10 @@ function Timer() {
   return (
     <div>
       <div className="timer">{time}</div>
+      <div className="min-sec">
+        <span>min</span>
+        <span>sec</span>
+      </div>
       <div>
         <button
           className="buttons cta-buttons"
@@ -165,9 +169,9 @@ function Timer() {
           Stop
         </button>
       </div>
-      <div className="desc">Look 20 feet away for 20 seconds every 20 minutes</div>
       <Sound sound={sound} setSound={setSound}/>
       <SettingButtons setTabTimer={setTabTimer} setBgFlash={setBgFlash}/>
+      <div className="desc">*Reduce eye strain - every 20 min, look 20 ft away for 20 sec</div>
     </div>
   )
 }
